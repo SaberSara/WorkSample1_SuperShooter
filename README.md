@@ -1,8 +1,5 @@
-# WorkSample1 SuperShooter
-Super shooter is the 1st work sample game for Forsbergs Skola, it is the Tutorial Option with some extra touches
-
 ### Introductions/ Description
-A Hyper Casual Game where you Sling Shot your lovely girlfriend/boyfriend to the sea
+Super shooter is the 1st work sample game for Forsbergs Skola, it is the Tutorial Option with some extra touches
 
 ![img](https://github.com/SaberSara/WorkSample1_SuperShooter/blob/main/GitHub_Image_1.gif?raw=true)
 
