@@ -49,12 +49,18 @@ public class Projectile : MonoBehaviour
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS
     #region NON_MONOBEHAVIOUR_METHODS_PRIVATE
+    private void RotateInShootDirection()
+    {
+        Vector3 newRotation = Vector3.RotateTowards(transform.forward, shootDirection, 0.01f, 0.0f);
+        transform.rotation = Quaternion.LookRotation(newRotation);
+    }
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS_PUBLIC
     public void FireProjectile(Ray shootRay)
     {
         this.shootDirection = shootRay.direction;
         this.transform.position = shootRay.origin;
+        RotateInShootDirection();
     }
     #endregion
     #endregion
