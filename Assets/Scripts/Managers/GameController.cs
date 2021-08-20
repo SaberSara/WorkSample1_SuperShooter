@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 
 /// <summary>
@@ -24,17 +25,25 @@ public class GameController : MonoBehaviour
     #region PUBLIC_VARIABLES
     public EnemyProducer enemyProducer;
     public GameObject playerPrefab;
+    public Text winText;
+    public Text countText;
+    public int enemyDeaths;
     #endregion
     #region MONOBEHAVIOUR_METHODS
     #region MONOBEHAVIOUR_METHODS_PRIVATE
     //Example Method and comment
     private void Start()
     {
+        enemyDeaths = 0;
+
         var player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         player.onPlayerDeath += OnPlayerDeath;
+
+        countText.text = GetKillCountText();
     }
     #endregion
     #region PMONOBEHAVIOUR_METHODS_PUBLIC
+
     #endregion
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS
@@ -50,6 +59,9 @@ public class GameController : MonoBehaviour
 
     private void RestartGame()
     {
+        enemyDeaths = 0;
+        winText.text = "";
+        countText.text = "";
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach(var enemy in enemies)
         {
@@ -63,8 +75,43 @@ public class GameController : MonoBehaviour
         enemyProducer.SpawnEnemies(true);
         playerObject.GetComponent<Player>().onPlayerDeath += OnPlayerDeath;
     }
+
+
+    private void StopEnemies()
+    {
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(var enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+
+        var enemyProducer = GameObject.Find("EnemyProducer");
+        Destroy(enemyProducer);
+    }
+
+
+
+
+
+    private String GetKillCountText()
+    {
+        return "Kill count: " + enemyDeaths;
+    }
+
+
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS_PUBLIC
+    public void OnEnemyDeath()
+    {
+        enemyDeaths++;
+        countText.text = GetKillCountText();
+
+        if (enemyDeaths >= 5)
+        {
+            winText.text = "Sara WINS!";
+            StopEnemies();
+        }
+    }
     #endregion
     #endregion
 }
