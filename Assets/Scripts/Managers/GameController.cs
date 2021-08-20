@@ -13,33 +13,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 /// <summary>
-/// The Player script
-/// Attached to the player
+/// This is the Game controller scrpt (Game manager S)ss)
 /// </summary>
-public class Player : MonoBehaviour
+public class GameController : MonoBehaviour
 {
     #region PRIVATE_VARIABLES
     #endregion
     #region PUBLIC_VARIABLES
-    public int health = 3;
-    public event Action<Player> onPlayerDeath;
+    public EnemyProducer enemyProducer;
+    public GameObject playerPrefab;
     #endregion
     #region MONOBEHAVIOUR_METHODS
     #region MONOBEHAVIOUR_METHODS_PRIVATE
     //Example Method and comment
-    private void Update()
+    private void Start()
     {
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Enemy enemy = collision.collider.GetComponent<Enemy>();
-        if(enemy)
-        {
-            CollideWithEnemy(enemy);
-        }
-        
+        var player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        player.onPlayerDeath += OnPlayerDeath;
     }
     #endregion
     #region PMONOBEHAVIOUR_METHODS_PUBLIC
@@ -47,16 +39,29 @@ public class Player : MonoBehaviour
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS
     #region NON_MONOBEHAVIOUR_METHODS_PRIVATE
-    private void CollideWithEnemy(Enemy enemy)
+    private void OnPlayerDeath(Player player)
     {
-        enemy.Attack(this);
-        if(health <=0)
+        enemyProducer.SpawnEnemies(false);
+        Destroy(player.gameObject);
+
+        Invoke("RestartGame", 3);
+    }
+
+
+    private void RestartGame()
+    {
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(var enemy in enemies)
         {
-            if(onPlayerDeath!=null)
-            {
-                onPlayerDeath(this);
-            }
+            Destroy(enemy);
         }
+
+        var playerObject = Instantiate(playerPrefab, new Vector3(0, 0.5f, 0),
+            Quaternion.identity) as GameObject;
+        var cameraRig = Camera.main.GetComponent<CameraRig>();
+        cameraRig.target = playerObject;
+        enemyProducer.SpawnEnemies(true);
+        playerObject.GetComponent<Player>().onPlayerDeath += OnPlayerDeath;
     }
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS_PUBLIC
