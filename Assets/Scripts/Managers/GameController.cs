@@ -26,14 +26,20 @@ public class GameController : MonoBehaviour
     public EnemyProducer enemyProducer;
     public GameObject playerPrefab;
     public Text winText;
+    public Text looseText;
     public Text countText;
     public int enemyDeaths;
+    public Canvas inGameCanvas;
+    public Canvas winGameCanvas;
+    public Canvas looseGameCanvas;
+    
     #endregion
     #region MONOBEHAVIOUR_METHODS
     #region MONOBEHAVIOUR_METHODS_PRIVATE
     //Example Method and comment
     private void Start()
     {
+        InitializeUI();
         enemyDeaths = 0;
 
         var player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -52,16 +58,28 @@ public class GameController : MonoBehaviour
     {
         enemyProducer.SpawnEnemies(false);
         Destroy(player.gameObject);
-
+        looseText.text = "You Lose, Restarting game...";
+        //Show the panel for the game etc ?
         Invoke("RestartGame", 3);
+        
     }
 
+
+    private void InitializeUI()
+    {
+        winText.text = "";
+        looseText.text = "";
+        countText.text = "Kill count: 0";
+    }
+   
 
     private void RestartGame()
     {
         enemyDeaths = 0;
-        winText.text = "";
-        countText.text = "";
+        /*winText.text = "";
+        countText.text = "";*/
+        //Replaced by InitializeUI()
+        InitializeUI();
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach(var enemy in enemies)
         {
@@ -89,11 +107,18 @@ public class GameController : MonoBehaviour
         Destroy(enemyProducer);
     }
 
+    private void StopEnemiesForRestartGame()
+    {
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+    }
 
 
 
-
-    private String GetKillCountText()
+        private String GetKillCountText()
     {
         return "Kill count: " + enemyDeaths;
     }
@@ -111,6 +136,25 @@ public class GameController : MonoBehaviour
             winText.text = "Sara WINS!";
             StopEnemies();
         }
+    }
+
+    public void OnClickRestartGame()
+    {
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        enemyProducer.SpawnEnemies(false);
+        Destroy(player.gameObject);
+        //We want to have the player disapear then the enemies then restart the game into an empty scene
+        Invoke("StopEnemiesForRestartGame", 1);
+        //Play some effects ?
+        Invoke("RestartGame", 2);
+    }
+
+    //Not used
+    private void SetUI(string winText, string looseText, string countText)
+    {
+        this.winText.text = winText;
+        this.looseText.text = looseText;
+        this.countText.text = countText;
     }
     #endregion
     #endregion
