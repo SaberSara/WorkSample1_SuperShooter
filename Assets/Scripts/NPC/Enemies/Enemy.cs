@@ -61,6 +61,13 @@ public class Enemy : MonoBehaviour
         player.health -= this.damage;
         Destroy(this.gameObject);
     }
+
+    public void Initialize(Transform target, float moveSpeed, int health)
+    {
+        this.targetTransform = target;
+        this.moveSpeed = moveSpeed;
+        this.health = health;
+    }
     #endregion
     #endregion
 }
