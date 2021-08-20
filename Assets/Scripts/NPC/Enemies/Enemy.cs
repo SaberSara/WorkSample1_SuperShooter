@@ -14,44 +14,53 @@ using UnityEngine;
 
 
 /// <summary>
-/// This is a camera player script
-/// Attached to the "Main Camera" GameObject
+/// Enemy Script
+/// Attached to the "enemy" gameObject
 /// </summary>
-public class CameraRig : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     #region PRIVATE_VARIABLES
-    private Transform rigTransform;
     #endregion
     #region PUBLIC_VARIABLES
     public float moveSpeed;
-    public GameObject target;
+    public int health;
+    public int damage;
+    public Transform targetTransform;
     #endregion
     #region MONOBEHAVIOUR_METHODS
     #region MONOBEHAVIOUR_METHODS_PRIVATE
-    
-    private void Start()
-    {
-        rigTransform = this.transform.parent;
-    }
+    //Example Method and comment
     private void FixedUpdate()
     {
-        if(target==null)
+        if(targetTransform!=null)
         {
-            return;
+            this.transform.position = Vector3.MoveTowards(this.transform.position,
+                targetTransform.transform.position, Time.deltaTime * moveSpeed);
         }
-        rigTransform.position = Vector3.Lerp(rigTransform.position,
-            target.transform.position,
-            Time.deltaTime * moveSpeed);
     }
     #endregion
     #region PMONOBEHAVIOUR_METHODS_PUBLIC
     #endregion
-
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS
     #region NON_MONOBEHAVIOUR_METHODS_PRIVATE
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS_PUBLIC
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        if(health<=0)
+        {
+            Destroy(this.gameObject); 
+        }
+    }
+
+    public void Attack(Player player)
+    {
+        player.health -= this.damage;
+        Destroy(this.gameObject);
+    }
     #endregion
     #endregion
 }

@@ -14,42 +14,46 @@ using UnityEngine;
 
 
 /// <summary>
-/// This is a camera player script
-/// Attached to the "Main Camera" GameObject
+/// The Player script
+/// Attached to the player
 /// </summary>
-public class CameraRig : MonoBehaviour
+public class Player : MonoBehaviour
 {
     #region PRIVATE_VARIABLES
-    private Transform rigTransform;
     #endregion
     #region PUBLIC_VARIABLES
-    public float moveSpeed;
-    public GameObject target;
+    public int health = 3;
     #endregion
     #region MONOBEHAVIOUR_METHODS
     #region MONOBEHAVIOUR_METHODS_PRIVATE
-    
-    private void Start()
+    //Example Method and comment
+    private void Update()
     {
-        rigTransform = this.transform.parent;
     }
-    private void FixedUpdate()
+
+    private void OnCollisionEnter(Collision collision)
     {
-        if(target==null)
+        Enemy enemy = collision.collider.GetComponent<Enemy>();
+        if(enemy)
         {
-            return;
+            CollideWithEnemy(enemy);
         }
-        rigTransform.position = Vector3.Lerp(rigTransform.position,
-            target.transform.position,
-            Time.deltaTime * moveSpeed);
+        
     }
     #endregion
     #region PMONOBEHAVIOUR_METHODS_PUBLIC
     #endregion
-
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS
     #region NON_MONOBEHAVIOUR_METHODS_PRIVATE
+    private void CollideWithEnemy(Enemy enemy)
+    {
+        enemy.Attack(this);
+        if(health <=0)
+        {
+
+        }
+    }
     #endregion
     #region NON_MONOBEHAVIOUR_METHODS_PUBLIC
     #endregion

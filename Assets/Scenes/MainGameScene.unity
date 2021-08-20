@@ -654,6 +654,7 @@ GameObject:
   - component: {fileID: 1054676918}
   - component: {fileID: 1054676920}
   - component: {fileID: 1054676919}
+  - component: {fileID: 1054676921}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -705,6 +706,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1054676921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054676917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab944d23fe574ea4480ab76c200fed0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  health: 2
+  damage: 1
+  targetTransform: {fileID: 1823107670}
 --- !u!1 &1145444333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,6 +1217,7 @@ GameObject:
   - component: {fileID: 1823107672}
   - component: {fileID: 1823107671}
   - component: {fileID: 1823107673}
+  - component: {fileID: 1823107674}
   m_Layer: 0
   m_Name: _Player
   m_TagString: Untagged
@@ -1265,6 +1283,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 625
   maxSpeed: 4375
+--- !u!114 &1823107674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823107669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5276caccdb8a1574b9d06fdc21d0ffef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 3
 --- !u!1 &1838446388
 GameObject:
   m_ObjectHideFlags: 0
