@@ -50,9 +50,11 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
-        if(health<=0)
+        if (health <= 0)
         {
-            Destroy(this.gameObject); 
+            Destroy(this.gameObject);
+            var gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            gameController.OnEnemyDeath();
         }
     }
 
