@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 /// <summary>
@@ -29,6 +30,7 @@ public class GameController : MonoBehaviour
     public Text looseText;
     public Text countText;
     public int enemyDeaths;
+    public Canvas menuGameCanvas;
     public Canvas inGameCanvas;
     public Canvas winGameCanvas;
     public Canvas looseGameCanvas;
@@ -39,6 +41,8 @@ public class GameController : MonoBehaviour
     //Example Method and comment
     private void Start()
     {
+        Time.timeScale = 0; 
+
         InitializeUI();
         enemyDeaths = 0;
 
@@ -59,7 +63,7 @@ public class GameController : MonoBehaviour
         enemyProducer.SpawnEnemies(false);
         Destroy(player.gameObject);
         looseText.text = "You Lose, Restarting game...";
-        //Show the panel for the game etc ?
+        looseGameCanvas.enabled = true; //Show the panel for the game etc ?
         Invoke("RestartGame", 3);
         
     }
@@ -70,11 +74,20 @@ public class GameController : MonoBehaviour
         winText.text = "";
         looseText.text = "";
         countText.text = "Kill count: 0";
+
+        
+        looseGameCanvas.enabled = false;
+        winGameCanvas.enabled = false;
+        inGameCanvas.enabled = true;
     }
    
 
     private void RestartGame()
     {
+        menuGameCanvas.enabled = false;
+        looseGameCanvas.enabled = false;
+        winGameCanvas.enabled = false;
+        inGameCanvas.enabled = true;
         enemyDeaths = 0;
         /*winText.text = "";
         countText.text = "";*/
@@ -87,7 +100,7 @@ public class GameController : MonoBehaviour
         }
 
         var playerObject = Instantiate(playerPrefab, new Vector3(0, 0.5f, 0),
-            Quaternion.identity) as GameObject;
+        Quaternion.identity) as GameObject;
         var cameraRig = Camera.main.GetComponent<CameraRig>();
         cameraRig.target = playerObject;
         enemyProducer.SpawnEnemies(true);
@@ -134,10 +147,25 @@ public class GameController : MonoBehaviour
         if (enemyDeaths >= 5)
         {
             winText.text = "Sara WINS!";
+            
             StopEnemies();
-        }
+        winGameCanvas.enabled = true; //Show the panel for the game etc ?
+            Invoke("ReloadGameScene", 2);
+                   }
     }
 
+    public void ReloadGameScene()
+    {
+        SceneManager.LoadScene("MainGameScene");
+    }
+    public void OnClickStartGame()
+    {
+        menuGameCanvas.enabled = false;
+        looseGameCanvas.enabled = false;
+        winGameCanvas.enabled = false;
+        inGameCanvas.enabled = true;
+        Time.timeScale = 1;
+    }
     public void OnClickRestartGame()
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -148,9 +176,14 @@ public class GameController : MonoBehaviour
         //Play some effects ?
         Invoke("RestartGame", 2);
     }
-
+    
+    
+    public void OnClickQuitGame()
+    {
+        Application.Quit();
+    }
     //Not used
-    private void SetUI(string winText, string looseText, string countText)
+    public void SetUI(string winText, string looseText, string countText)
     {
         this.winText.text = winText;
         this.looseText.text = looseText;
