@@ -22,6 +22,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     #region PRIVATE_VARIABLES
+    private SoundManager soundManager;
     #endregion
     #region PUBLIC_VARIABLES
     public EnemyProducer enemyProducer;
@@ -29,11 +30,13 @@ public class GameController : MonoBehaviour
     public Text winText;
     public Text looseText;
     public Text countText;
+    public Text healthText;
     public int enemyDeaths;
     public Canvas menuGameCanvas;
     public Canvas inGameCanvas;
     public Canvas winGameCanvas;
     public Canvas looseGameCanvas;
+    
     
     #endregion
     #region MONOBEHAVIOUR_METHODS
@@ -41,8 +44,9 @@ public class GameController : MonoBehaviour
     //Example Method and comment
     private void Start()
     {
-        Time.timeScale = 0; 
-
+        Time.timeScale = 0;
+        soundManager = FindObjectOfType<SoundManager>();
+        soundManager.play("BG_MainGame");
         InitializeUI();
         enemyDeaths = 0;
 
@@ -63,7 +67,10 @@ public class GameController : MonoBehaviour
         enemyProducer.SpawnEnemies(false);
         Destroy(player.gameObject);
         looseText.text = "You Lose, Restarting game...";
+        soundManager.continuePlayWithVolume("BG_MainGame", 0.6f);
+        soundManager.play("SFX_LooseGame");
         looseGameCanvas.enabled = true; //Show the panel for the game etc ?
+        inGameCanvas.enabled = false; //Show the panel for the game etc ?
         Invoke("RestartGame", 3);
         
     }
@@ -78,21 +85,22 @@ public class GameController : MonoBehaviour
         
         looseGameCanvas.enabled = false;
         winGameCanvas.enabled = false;
-        inGameCanvas.enabled = true;
+        inGameCanvas.enabled = false;
     }
    
 
     private void RestartGame()
     {
-        menuGameCanvas.enabled = false;
-        looseGameCanvas.enabled = false;
-        winGameCanvas.enabled = false;
-        inGameCanvas.enabled = true;
+        soundManager.continuePlayWithVolume("BG_MainGame", 0.3f);
         enemyDeaths = 0;
         /*winText.text = "";
         countText.text = "";*/
         //Replaced by InitializeUI()
         InitializeUI();
+        menuGameCanvas.enabled = false;
+        looseGameCanvas.enabled = false;
+        winGameCanvas.enabled = false;
+        inGameCanvas.enabled = true;
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach(var enemy in enemies)
         {
@@ -143,14 +151,16 @@ public class GameController : MonoBehaviour
     {
         enemyDeaths++;
         countText.text = GetKillCountText();
+        soundManager.play("SFX_Count");
 
         if (enemyDeaths >= 5)
         {
             winText.text = "Sara WINS!";
-            
+            soundManager.continuePlayWithVolume("BG_MainGame", 0.6f);
+            soundManager.play("SFX_WinGame");
             StopEnemies();
         winGameCanvas.enabled = true; //Show the panel for the game etc ?
-            Invoke("ReloadGameScene", 2);
+            Invoke("ReloadGameScene", 3);
                    }
     }
 
@@ -160,6 +170,7 @@ public class GameController : MonoBehaviour
     }
     public void OnClickStartGame()
     {
+        soundManager.continuePlayWithVolume("BG_MainGame", 0.3f);
         menuGameCanvas.enabled = false;
         looseGameCanvas.enabled = false;
         winGameCanvas.enabled = false;
@@ -168,6 +179,7 @@ public class GameController : MonoBehaviour
     }
     public void OnClickRestartGame()
     {
+        CancelInvoke();
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         enemyProducer.SpawnEnemies(false);
         Destroy(player.gameObject);
