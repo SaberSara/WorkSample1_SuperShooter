@@ -18,4 +18,4 @@ Super shooter is the 1st work sample game for Forsbergs Skola, it is the Tutoria
 ### For more inquiries and/or contacts :) :shipit:: 
  - ***Personal e-mail: sarasaberdev@gmail.com***
  - ***Phone number (also WhatsApp available): +90 542 288 31 86***
- - ***Personal Blog/Games's Website: http://www.sarasaber.com***
+ - ***Personal Blog/Games's Website: http://www.sabersara.com***
